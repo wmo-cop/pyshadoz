@@ -1,81 +1,91 @@
 # pyshadoz
 
-[![Build Status](https://travis-ci.org/woudc/woudc-data-registry.png)](https://travis-ci.org/woudc/woudc-data-registry)
-[![Coverage Status](https://coveralls.io/repos/github/woudc/woudc-data-registry/badge.svg?branch=master)](https://coveralls.io/github/woudc/woudc-data-registry?branch=master)
+[![Build Status](https://travis-ci.org/tomkralidis/pyshadoz.png)](https://travis-ci.org/tomkralidis/pyshadoz)
+[![Coverage Status](https://coveralls.io/repos/github/tomkralidis/pyshadoz/badge.svg?branch=master)](https://coveralls.io/github/tomkralidis/pyshadoz?branch=master)
 
 ## Overview
 
-WOUDC Data Registry is a platform that manages Ozone and Ultraviolet
-Radiation data in support of the [World Ozone and Ultraviolet Radiation Data
-Centre (WOUDC)](http://woudc.org), one of six World Data Centres as part of
-the [Global Atmosphere Watch](http://www.wmo.int/gaw) programme of the
-[WMO](http://www.wmo.int).
+pyshadoz is a Python package to read and write [NASA Southern Hemisphere
+ADditional OZonesondes](https://tropo.gsfc.nasa.gov/shadoz/) (SHADOZ) data.
 
 
 ## Installation
 
 ### Requirements
-- Python 3 and above
+- Python 3.  Works with Python 2.7
 - [virtualenv](https://virtualenv.pypa.io/)
 
 ### Dependencies
 Dependencies are listed in [requirements.txt](requirements.txt). Dependencies
-are automatically installed during woudc-data-registry installation.
+are automatically installed during pyshadoz installation.
 
-### Installing woudc-data-registry
+### Installing pyshadoz
 
 ```bash
 # setup virtualenv
-virtualenv --system-site-packages -p python3 woudc-data-registry
-cd woudc-data-registry
+virtualenv --system-site-packages -p python3 pyshadoz
+cd pyshadoz
 source bin/activate
 
 # clone codebase and install
-git clone https://github.com/woudc/woudc-data-registry.git
-cd woudc-data-registry
+git clone https://github.com/tomkralidis/pyshadoz.git
+cd pyshadoz
 python setup.py build
 python setup.py install
-
-# set system environment variables
-cp default.env foo.env
-vi foo.env  # edit database connection parameters, etc.
-. foo.env
-
-# create database
-make ENV=foo.env createdb
-
-# drop database
-make ENV=foo.env dropdb
-
-# initialize model (database tables)
-woudc-data-registry model setup
-
-# cleanups
-
-# re-initialize model (database tables)
-woudc-data-registry model teardown
-woudc-data-registry model setup
-
-# drop database
-make ENV=foo.env dropdb
-
 ```
 
-### Running woudc-data-registry
+### Running
 
 ```bash
-# ingest directory of files (walks directory recursively)
-woudc-data-registry data ingest -d /path/to/dir
+# parse a single shadoz file
+pyshadoz -f </path/to/shadoz_file>
 
-# ingest single file
-woudc-data-registry data ingest -f foo.dat
+# parse a directory shadoz files
+pyshadoz -d </path/to/directory>
 
-# verify directory of files (walks directory recursively)
-woudc-data-registry data ingest -d /path/to/dir --verify
+# parse a directory shadoz files recursively
+pyshadoz -d </path/to/directory> -r
+```
 
-# verify single file
-woudc-data-registry data ingest -f foo.dat --verify
+### Using the API
+```python
+from pyshadoz import SHADOZ
 
+# read SHADOZ data
+with open('/path/to/directory') as ff:
+    s = SHADOZ(ff)
+
+    for key, value in s.metadata:
+        print(key, value)
+
+    print(s.data_fields)
+    print(s.data_fields_units)
+    print(len(s.data))
+
+# write SHADOZ data
+s = SHADOZ()
+# build metadata dict
+s.metadata['NASA/GSFC/SHADOZ Archive'] = 'http://croc.gsfc.nasa.gov/shadoz'
+....
+# build data fields
+s.data_fields = ['Time', 'Press', 'Alt', 'Temp', 'RH', 'O3', 'O3', 'O3',
+                 'W Dir', 'W Spd', 'T Pump', 'I O3', 'GPSLon', 'GPSLat',
+                 'GPSAlt']
+
+# build data field units
+s.data_fields_units = ['sec','hPa','km', 'C', '%', 'mPa', 'ppmv', 'du', 'deg',
+                       'm/s', 'C', 'uA', 'deg', 'deg', 'km']
+
+# build data
+s.data = [
+    [0, 1013.85, 0.01, 24.22, 71.0, 32.91, 32.91, 0.0, 32.91, 5.29, 32.91, 9000.0, -155.049, 19.717, 0.041],
+    [0, 1013.66, 0.012, 23.89, 70.0, 32.79, 32.79, 0.049, 32.79, 5.01, 32.79, 9000.0, -155.049, 19.717, 0.045]
+]
+
+# serialize data to file
+shadoz_data = s.write()
+with open('new_shadoz_file.dat', 'w') as ff:
+    ff.write(shadoz_data)
 ```
 
 ### Running Tests
@@ -85,14 +95,13 @@ woudc-data-registry data ingest -f foo.dat --verify
 pip install -r requirements-dev.txt
 
 # run tests like this:
-cd woudc_data_registry/tests
-python run_tests.py
+python pyshadoz/tests/run_tests.py
 
 # or this:
 python setup.py test
 
 # measure code coverage
-coverage run --source=woudc_data_registry -m unittest woudc_data_registry.tests.run_tests
+coverage run --source=pyshadoz -m unittest pyshadoz.tests.run_tests
 coverage report -m
 ```
 
@@ -102,7 +111,7 @@ coverage report -m
 
 ### Bugs and Issues
 
-All bugs, enhancements and issues are managed on [GitHub](https://github.com/woudc/woudc-data-registry/issues).
+All bugs, enhancements and issues are managed on [GitHub](https://github.com/tomkralidis/pyshadoz/issues).
 
 ## Contact
 

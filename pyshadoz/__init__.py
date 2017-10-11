@@ -44,11 +44,14 @@
 # =================================================================
 
 from collections import OrderedDict
-from datetime import datetime, time
+from datetime import date, datetime, time
 import logging
 import os
 import re
-from StringIO import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 import click
 
@@ -68,11 +71,11 @@ def _get_value_type(field, value):
 
     if field2 == 'shadoz format data created':
         try:
-            value2 = datetime.strptime(value, '%d, %B, %Y')
+            value2 = datetime.strptime(value, '%d, %B, %Y').date()
         except ValueError:
-            value2 = datetime.strptime(value, '%d %B, %Y')
+            value2 = datetime.strptime(value, '%d %B, %Y').date()
     elif field2 == 'launch date':
-        value2 = datetime.strptime(value, '%Y%m%d')
+        value2 = datetime.strptime(value, '%Y%m%d').date()
     elif field2 == 'launch time (ut)':
         if 'GMT' in value:
             LOGGER.warning('Launch time seconds has GMT timezone')
@@ -196,8 +199,11 @@ class SHADOZ(object):
     def write(self):
         """SHADOZ writer"""
 
+        lines = []
+
         line0 = len(self.metadata.keys()) + 3
-        print(line0)
+
+        lines.append(str(line0))
 
         mwidth = max(map(len, self.metadata))
 
@@ -206,16 +212,32 @@ class SHADOZ(object):
                 value2 = value.strftime('%d %B, %Y')
             elif isinstance(value, time):
                 value2 = value.strftime('%H:%M:%S')
-            elif isinstance(value, datetime):
+            elif isinstance(value, datetime) or isinstance(value, date):
                 value2 = value.strftime('%Y%m%d')
             else:
                 value2 = value
-            print('{0: <{width}}: {value}'.format(key, width=mwidth, value=value2))
+            lines.append('{0: <{width}}: {value}'.format(key, width=mwidth,
+                                                         value=value2))
+
+        dfl = ' '.join([df.rjust(10) for df in self.data_fields])
+        dfl = dfl.replace('      Time', 'Time')
+        lines.append(dfl)
+
+        dful = ' '.join([dfu.rjust(10) for dfu in self.data_fields_units])
+        dful = dful.replace('      sec', 'sec')
+        lines.append(dful)
+
+        for data_ in self.data:
+            dl = ' '.join([repr(d).rjust(10) for d in data_])
+            dl.replace('     ', '')
+            lines.append(dl)
+
+        return '\n'.join([re.sub('^     ', '', l) for l in lines])
 
     def get_data_fields(self):
         """get a list of data fields and units"""
 
-        return zip(self.data_fields, self.data_fields_units)
+        return list(zip(self.data_fields, self.data_fields_units))
 
     def get_data(self, data_field=None, data_field_unit=None):
         """return all data from a data field/data field unit"""
@@ -284,7 +306,9 @@ def loads(strbuf):
               type=click.Path(exists=True, resolve_path=True,
                               dir_okay=True, file_okay=False),
               help='Path to directory of SHADOZ data files')
-def shadoz_info(file_, directory):
+@click.option('--recursive', '-r', is_flag=True,
+              help='process directory recursively')
+def shadoz_info(file_, directory, recursive):
     """parse shadoz data file(s)"""
 
     if file_ is not None and directory is not None:
@@ -297,9 +321,14 @@ def shadoz_info(file_, directory):
 
     files = []
     if directory is not None:
-        for root, dirs, files_ in os.walk(directory):
-            for f in files_:
-                files.append(os.path.join(root, f))
+        if recursive:
+            for root, dirs, files_ in os.walk(directory):
+                for f in files_:
+                    files.append(os.path.join(root, f))
+        else:
+            for root, dirs, files_ in os.walk(directory):
+                for f in files_:
+                    files.append(os.path.join(root, f))
     elif file_ is not None:
         files = [file_]
 
@@ -307,7 +336,18 @@ def shadoz_info(file_, directory):
         click.echo('Parsing {}'.format(f))
         with open(f) as ff:
             try:
-                s = SHADOZ(ff)
-                s.write()
+                s = SHADOZ(ff, filename=f)
+                click.echo('SHADOZ file: {}\n'.format(s.filename))
+                click.echo('Metadata:')
+                for key, value in s.metadata.items():
+                    click.echo(' {}: {}'.format(key, value))
+                click.echo('\nData:')
+                click.echo(' Number of records: {}'.format(len(s.data)))
+                click.echo(' Attributes:')
+                for df in s.get_data_fields():
+                    data_field_data = sorted(s.get_data(df[0], df[1]))
+                    click.echo('  {} ({}): (min={}, max={})'.format(df[0],
+                               df[1], data_field_data[0], data_field_data[-1]))
+                click.echo('\n Number of records: {}'.format(len(s.data)))
             except InvalidDataError as err:
-                raise click.ClickException(err)
+                raise click.ClickException(str(err))

@@ -62,7 +62,7 @@ class PyTest(Command):
     def run(self):
         import subprocess
         errno = subprocess.call([sys.executable,
-                                 'woudc_data_registry/tests/run_tests.py'])
+                                 'pyshadoz/tests/run_tests.py'])
         raise SystemExit(errno)
 
 
@@ -81,7 +81,7 @@ def get_package_version():
                               version_file, re.M)
     if version_match:
         return version_match.group(1)
-    raise RuntimeError("Unable to find version string.")
+    raise RuntimeError('Unable to find version string.')
 
 
 try:
@@ -91,11 +91,8 @@ except(IOError, ImportError, OSError):
     print('Conversion to rST failed.  Using default (will look weird on PyPI)')
     LONG_DESCRIPTION = read('README.md')
 
-DESCRIPTION = ('WOUDC Data Registry is a platform that manages Ozone and '
-               'Ultraviolet Radiation data in support of the World Ozone and '
-               'Ultraviolet Radiation Data Centre (WOUDC), one of six World '
-               'Data Centres as part of the Global Atmosphere Watch '
-               'programme of the WMO.')
+DESCRIPTION = ('pyshadoz is a Python package to read and write NASA Southern '
+               'Hemisphere ADditional OZonesondes (SHADOZ) data.')
 
 if os.path.exists('MANIFEST'):
     os.unlink('MANIFEST')
@@ -120,9 +117,9 @@ setup(
     author_email='tom.kralidis@canada.ca',
     maintainer='Meteorological Service of Canada',
     maintainer_email='tom.kralidis@canada.ca',
-    url='https://github.com/WMO-ET-WDC/pyshadoz',
+    url='https://github.com/tomkralidis/pyshadoz',
     install_requires=read('requirements.txt').splitlines(),
-    packages=find_packages(),
+    packages=find_packages(exclude=['pyshadoz.tests']),
     include_package_data=True,
     entry_points={
         'console_scripts': [
@@ -136,8 +133,7 @@ setup(
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
-        'Programming Language :: Python',
-        'Topic :: Scientific/Engineering :: GIS'
+        'Programming Language :: Python'
     ],
     cmdclass={'test': PyTest},
 )
