@@ -1,7 +1,7 @@
 # pyshadoz
 
-[![Build Status](https://travis-ci.org/tomkralidis/pyshadoz.png)](https://travis-ci.org/tomkralidis/pyshadoz)
-[![Coverage Status](https://coveralls.io/repos/github/tomkralidis/pyshadoz/badge.svg?branch=master)](https://coveralls.io/github/tomkralidis/pyshadoz?branch=master)
+[![Build Status](https://travis-ci.org/WMO-ET-WDC/pyshadoz.png)](https://travis-ci.org/WMO-ET-WDC/pyshadoz)
+[![Coverage Status](https://coveralls.io/repos/github/WMO-ET-WDC/pyshadoz/badge.svg?branch=master)](https://coveralls.io/github/WMO-ET-WDC/pyshadoz?branch=master)
 
 ## Overview
 
@@ -28,7 +28,7 @@ cd pyshadoz
 source bin/activate
 
 # clone codebase and install
-git clone https://github.com/tomkralidis/pyshadoz.git
+git clone https://github.com/WMO-ET-WDC/pyshadoz.git
 cd pyshadoz
 python setup.py build
 python setup.py install
@@ -111,7 +111,7 @@ coverage report -m
 
 ### Bugs and Issues
 
-All bugs, enhancements and issues are managed on [GitHub](https://github.com/tomkralidis/pyshadoz/issues).
+All bugs, enhancements and issues are managed on [GitHub](https://github.com/WMO-ET-WDC/pyshadoz/issues).
 
 ## Contact
 
