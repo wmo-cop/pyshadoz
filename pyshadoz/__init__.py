@@ -122,7 +122,7 @@ class SHADOZ(object):
         """
 
         self.version = None
-        """SHADOZ version """
+        """SHADOZ version"""
 
         self.filename = filename
         """filename (optional)"""

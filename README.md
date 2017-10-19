@@ -62,6 +62,24 @@ with open('/path/to/directory') as ff:
     print(s.data_fields_units)
     print(len(s.data))
 
+    # get all data
+    data = s.get_data()
+
+    # get all data by field
+    data = s.get_data('W Spd')
+
+    # get all data by field and unit
+    data = s.get_data('O3', 'ppmv')
+
+# read SHADOZ data using convenience functions
+# parse file
+s = load('/path/to/shadoz_file.dat')  # returns SHADOZ object
+
+# parse string
+with open('/path/to/shadoz_file.dat') as ff:
+    shadoz_string = ff.read()
+s = loads(shadoz_string)  # returns SHADOZ object
+
 # write SHADOZ data
 s = SHADOZ()
 # build metadata dict
