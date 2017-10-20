@@ -96,6 +96,38 @@ class SHADOZTest(unittest.TestCase):
         filename = get_abspath('hilo_20160223_V05.1_R.dat')
         s = load(filename)
 
+        filename = get_abspath(
+            'hilo_20160223_V05.1_R-launch-time-no-seconds.dat')
+        s = load(filename)
+
+        filename = get_abspath(
+            'hilo_20160223_V05.1_R-empty-metadata-value.dat')
+        s = load(filename)
+
+        filename = get_abspath(
+            'hilo_20160223_V05.1_R-empty-metadata-value2.dat')
+        s = load(filename)
+
+        filename = get_abspath('hilo_20160223_V05.1_R-microseconds.dat')
+        s = load(filename)
+
+        filename = get_abspath('hilo_20160223_V05.1_R-zero-pad-string.dat')
+        s = load(filename)
+
+        with self.assertRaises(InvalidDataError):
+            filename = get_abspath('hilo_20160223_V05.1_R-bad-launch-time.dat')
+            s = load(filename)
+
+        with self.assertRaises(InvalidDataError):
+            filename = get_abspath(
+                'hilo_20160223_V05.1_R-bad-launch-time2.dat')
+            s = load(filename)
+
+        with self.assertRaises(InvalidDataError):
+            filename = get_abspath(
+                'hilo_20160223_V05.1_R-data-field-mismatch.dat')
+            s = load(filename)
+
         with open(get_abspath('hilo_20160223_V05.1_R.dat')) as ff:
             s = SHADOZ(ff, filename='hilo_20160223_V05.1_R.dat')
 
@@ -135,12 +167,24 @@ class SHADOZTest(unittest.TestCase):
             self.assertEqual(fields[0], ('Time', 'sec'))
             self.assertEqual(fields[-1], ('GPSAlt', 'km'))
 
+            # test get data index
+            index = s.get_data_index(data_field='W Dir')
+            self.assertEqual(index, 8)
+            index = s.get_data_index(data_field='O3', data_field_unit='ppmv')
+            self.assertEqual(index, 6)
+
             # test data
             data = s.get_data()
             self.assertEqual(len(data), 4342)
             self.assertEqual(data[0][4], 71.0)
             self.assertEqual(data[-1][2], 30.727)
             self.assertEqual(data[19][7], 1.415)
+
+            # test data by index
+            data = s.get_data(by_index=4)
+            self.assertEqual(data[11], 77.000)
+            self.assertEqual(max(data), 100.0)
+            self.assertEqual(min(data), 3.0)
 
             # test data with field
             data = s.get_data(data_field='Press')

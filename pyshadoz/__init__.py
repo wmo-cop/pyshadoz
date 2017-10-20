@@ -48,12 +48,10 @@ from datetime import date, datetime, time
 import logging
 import os
 import re
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO
+import sys
 
 import click
+from six import StringIO
 
 __version__ = '0.1.1'
 
@@ -61,7 +59,14 @@ LOGGER = logging.getLogger(__name__)
 
 
 def _get_value_type(field, value):
-    """derive true type from data value"""
+    """
+    Derive true type from data value
+
+    :param field: data field name
+    :param value: data value
+
+    :returns: value as a native Python data type
+    """
 
     field2 = field.lower()
     value2 = None
@@ -77,11 +82,14 @@ def _get_value_type(field, value):
     elif field2 == 'launch date':
         value2 = datetime.strptime(value, '%Y%m%d').date()
     elif field2 == 'launch time (ut)':
+        if ':' not in value:
+            raise InvalidDataError('Bad Launch time')
         if 'GMT' in value:
             LOGGER.warning('Launch time seconds has GMT timezone')
         try:
             hms = [int(v) for v in value.replace('GMT', '').split(':')]
         except ValueError:
+            LOGGER.debug('Launch time specifies microseconds')
             tmp, microseconds = value.split('.')
             hms = [int(v) for v in tmp.replace('GMT', '').split(':')]
             hms.append(int(microseconds))
@@ -159,12 +167,12 @@ class SHADOZ(object):
 
         LOGGER.debug('Parsing metadata')
         for metadataline in filelines[1:metadatalines-2]:
-            key, value = [v.strip() for v in metadataline.split(': ', 1)]
-            self.metadata[key] = _get_value_type(key, value)
-
-        LOGGER.debug('Checking SHADOZ Version')
-        if 'SHADOZ Version' not in self.metadata.keys():
-            raise InvalidDataError('Unable to find SHADOZ version')
+            try:
+                key, value = [v.strip() for v in metadataline.split(': ', 1)]
+                self.metadata[key] = _get_value_type(key, value)
+            except ValueError:
+                LOGGER.warning('No value found for {}'.format(key))
+                self.metadata[key] = None
 
         if isinstance(self.metadata['SHADOZ Version'], str):
             self.version = float(self.metadata['SHADOZ Version'].split()[0])
@@ -197,7 +205,11 @@ class SHADOZ(object):
             self.data.append(data)
 
     def write(self):
-        """SHADOZ writer"""
+        """
+        SHADOZ writer
+
+        :returns: SHADOZ data as string
+        """
 
         lines = []
 
@@ -235,12 +247,30 @@ class SHADOZ(object):
         return '\n'.join([re.sub('^     ', '', l) for l in lines])
 
     def get_data_fields(self):
-        """get a list of data fields and units"""
+        """
+        get a list of data fields and units
+
+        :returns: list of tuples of data fields and associated units
+        """
 
         return list(zip(self.data_fields, self.data_fields_units))
 
-    def get_data(self, data_field=None, data_field_unit=None):
-        """return all data from a data field/data field unit"""
+    def get_data(self, data_field=None, data_field_unit=None,
+                 by_index=None):
+        """
+        get all data from a data field/data field unit
+
+        :param data_field: data field name
+        :param data_field_units: data field name unit
+        :param by_index: index of data in table
+
+
+        :returns: list of lists of all data (default) or filtered by
+                  field/unit or index
+        """
+
+        if by_index is not None:
+            return [row[by_index] for row in self.data]
 
         if data_field is None and data_field_unit is None:  # return all data
             return self.data
@@ -263,6 +293,32 @@ class SHADOZ(object):
                 return [row[data_index2] for row in self.data]
             else:
                 raise DataAccessError('Data field/unit mismatch')
+
+    def get_data_index(self, data_field, data_field_unit=None):
+        """
+        Get a data field's index
+
+        :param data_field: data field name
+        :param data_field_units: data field name unit
+
+        :returns: index of data field/unit
+        """
+
+        data_field_indexes = \
+            [i for i, x in enumerate(self.data_fields) if x == data_field]
+
+        data_field_unit_indexes = \
+            [i for i, x in enumerate(self.data_fields_units)
+             if x == data_field_unit]
+
+        if data_field_unit is None:
+            return data_field_indexes[0]
+        else:
+            data_index = set(data_field_indexes).intersection(
+                data_field_unit_indexes)
+
+            if data_index:
+                return list(data_index)[0]
 
 
 class DataAccessError(Exception):
@@ -308,8 +364,17 @@ def loads(strbuf):
               help='Path to directory of SHADOZ data files')
 @click.option('--recursive', '-r', is_flag=True,
               help='process directory recursively')
-def shadoz_info(file_, directory, recursive):
+@click.option('--verbose', '-v', is_flag=True, help='verbose mode')
+def shadoz_info(file_, directory, recursive, verbose=False):
     """parse shadoz data file(s)"""
+
+    if verbose:
+        ch = logging.StreamHandler(sys.stdout)
+        ch.setLevel(logging.DEBUG)
+        ch.setFormatter(logging.Formatter('%(levelname)s: %(message)s'))
+        LOGGER.addHandler(ch)
+    else:
+        LOGGER.addHandler(logging.NullHandler())
 
     if file_ is not None and directory is not None:
         msg = '--file and --directory are mutually exclusive'
@@ -326,9 +391,8 @@ def shadoz_info(file_, directory, recursive):
                 for f in files_:
                     files.append(os.path.join(root, f))
         else:
-            for root, dirs, files_ in os.walk(directory):
-                for f in files_:
-                    files.append(os.path.join(root, f))
+            for files_ in os.listdir(directory):
+                files.append(os.path.join(directory, files_))
     elif file_ is not None:
         files = [file_]
 
@@ -348,6 +412,5 @@ def shadoz_info(file_, directory, recursive):
                     data_field_data = sorted(s.get_data(df[0], df[1]))
                     click.echo('  {} ({}): (min={}, max={})'.format(df[0],
                                df[1], data_field_data[0], data_field_data[-1]))
-                click.echo('\n Number of records: {}'.format(len(s.data)))
             except InvalidDataError as err:
                 raise click.ClickException(str(err))

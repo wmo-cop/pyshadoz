@@ -91,8 +91,8 @@ except(IOError, ImportError, OSError):
     print('Conversion to rST failed.  Using default (will look weird on PyPI)')
     LONG_DESCRIPTION = read('README.md')
 
-DESCRIPTION = ('pyshadoz is a Python package to read and write NASA Southern '
-               'Hemisphere ADditional OZonesondes (SHADOZ) data.')
+DESCRIPTION = ('pyshadoz is a pure Python package to read and write NASA '
+               'Southern Hemisphere ADditional OZonesondes (SHADOZ) data.')
 
 if os.path.exists('MANIFEST'):
     os.unlink('MANIFEST')

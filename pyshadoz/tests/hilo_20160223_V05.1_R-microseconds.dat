@@ -9,7 +9,7 @@ Latitude (deg)                   : 19.43
 Longitude (deg)                  : -155.04
 Elevation (m)                    : 11.0
 Launch Date                      : 20160223
-Launch Time (UT)                 : 23:18:37
+Launch Time (UT)                 : 23:18:37.33
 Highest level reached (hPa)      : 10.33
 Integrated O3 until EOF (DU)     : ******
 Sonde/Sage Climatology(1988-2002): 60.88
@@ -20,8 +20,8 @@ Applied pump corrections         : NOAA Average (Johnson et al. 2002)
 Pump flow rate (sec/100ml)       : 29.610
 Background current (uA)          : 0.010
 Missing or bad values            : 9000
-Time Press       Alt      Temp      RH         O3        O3        O3      W Dir     W Spd      T Pump    I O3      GPSLon   GPSLat   GPSAlt
-km       C         %          mPa       ppmv      du      deg       m/s        C         uA        deg      deg          km
+Time    Press       Alt      Temp      RH         O3        O3        O3      W Dir     W Spd      T Pump    I O3      GPSLon   GPSLat   GPSAlt
+sec     hPa         km       C         %          mPa       ppmv      du      deg       m/s        C         uA        deg      deg          km
     0  1013.850     0.010    24.220    71.000    32.910    32.910     0.000    32.910     5.290    32.910  9000.000  -155.049    19.717     0.041
     0  1013.660     0.012    23.890    70.000    32.790    32.790     0.049    32.790     5.010    32.790  9000.000  -155.049    19.717     0.045
     2  1013.400     0.014    23.500    71.000    33.920    33.920     0.116    33.920     4.680    33.920  9000.000  -155.049    19.717     0.050

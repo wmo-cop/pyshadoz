@@ -5,7 +5,7 @@
 
 ## Overview
 
-pyshadoz is a Python package to read and write [NASA Southern Hemisphere
+pyshadoz is a pure Python package to read and write [NASA Southern Hemisphere
 ADditional OZonesondes](https://tropo.gsfc.nasa.gov/shadoz/) (SHADOZ) data.
 
 
@@ -37,14 +37,20 @@ python setup.py install
 ### Running
 
 ```bash
+# help
+pyshadoz --help
+
 # parse a single shadoz file
 pyshadoz -f </path/to/shadoz_file>
+
+# add verbose mode
+pyshadoz -v -f </path/to/shadoz_file>
 
 # parse a directory shadoz files
 pyshadoz -d </path/to/directory>
 
 # parse a directory shadoz files recursively
-pyshadoz -d </path/to/directory> -r
+pyshadoz -r -d </path/to/directory>
 ```
 
 ### Using the API
@@ -62,8 +68,17 @@ with open('/path/to/directory') as ff:
     print(s.data_fields_units)
     print(len(s.data))
 
+    # get index of a data field
+    index = s.get_data_index('W Dir')
+
+    # get index of a data field and data field unit
+    index = s.get_data_index('W Dir', 'deg')
+
     # get all data
     data = s.get_data()
+
+    # get data by index
+    data = s.get_data(by_index=index)
 
     # get all data by field
     data = s.get_data('W Spd')
