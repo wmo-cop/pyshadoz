@@ -320,6 +320,10 @@ class SHADOZ(object):
             if data_index:
                 return list(data_index)[0]
 
+    def __repr__(self):
+        """repr function"""
+        return '<SHADOZ (filename: {})>'.format(self.filename)
+
 
 class DataAccessError(Exception):
     """Exception stub for invalid data access by data field/unit"""

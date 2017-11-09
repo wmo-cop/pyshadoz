@@ -11,6 +11,13 @@ ADditional OZonesondes](https://tropo.gsfc.nasa.gov/shadoz/) (SHADOZ) data.
 
 ## Installation
 
+The easiest way to install pyshadoz is via the Python [pip](https://pip.pypa.io/en/stable/)
+utility:
+
+```bash
+pip install pyshadoz
+```
+
 ### Requirements
 - Python 3.  Works with Python 2.7
 - [virtualenv](https://virtualenv.pypa.io/)
@@ -34,11 +41,14 @@ python setup.py build
 python setup.py install
 ```
 
-### Running
+## Running
 
 ```bash
 # help
 pyshadoz --help
+
+# get version
+pyshadoz --version
 
 # parse a single shadoz file
 pyshadoz -f </path/to/shadoz_file>
@@ -46,10 +56,10 @@ pyshadoz -f </path/to/shadoz_file>
 # add verbose mode
 pyshadoz -v -f </path/to/shadoz_file>
 
-# parse a directory shadoz files
+# parse a directory of shadoz files
 pyshadoz -d </path/to/directory>
 
-# parse a directory shadoz files recursively
+# parse a directory of shadoz files recursively
 pyshadoz -r -d </path/to/directory>
 ```
 
@@ -121,6 +131,8 @@ with open('new_shadoz_file.dat', 'w') as ff:
     ff.write(shadoz_data)
 ```
 
+## Development
+
 ### Running Tests
 
 ```bash
@@ -136,6 +148,13 @@ python setup.py test
 # measure code coverage
 coverage run --source=pyshadoz -m unittest pyshadoz.tests.run_tests
 coverage report -m
+```
+
+## Releasing
+
+```bash
+python setup.py sdist bdist_wheel --universal
+twine dist/*
 ```
 
 ### Code Conventions
