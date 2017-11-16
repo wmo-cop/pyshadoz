@@ -154,7 +154,7 @@ coverage report -m
 
 ```bash
 python setup.py sdist bdist_wheel --universal
-twine dist/*
+twine upload dist/*
 ```
 
 ### Code Conventions
