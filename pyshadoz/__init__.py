@@ -141,7 +141,7 @@ class SHADOZ(object):
         self.data_fields = []
         """data fields"""
 
-        self.data_units = []
+        self.data_fields_units = []
         """data field units"""
 
         self.data = []  # list of lists
@@ -261,7 +261,7 @@ class SHADOZ(object):
         get all data from a data field/data field unit
 
         :param data_field: data field name
-        :param data_field_units: data field name unit
+        :param data_field_unit: data field name unit
         :param by_index: index of data in table
 
 
