@@ -53,7 +53,7 @@ import sys
 import click
 from six import StringIO
 
-__version__ = '0.1.2'
+__version__ = '0.1.3'
 
 LOGGER = logging.getLogger(__name__)
 
