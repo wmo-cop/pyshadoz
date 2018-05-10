@@ -1,5 +1,5 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Source: https://github.com/WMO-ET-WDC/pyshadoz
+Source: https://github.com/wmo-cop/pyshadoz
 
 Files: *
 Copyright: Copyright (c) 2017 Government of Canada

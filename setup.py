@@ -136,7 +136,7 @@ setup(
     author_email='tom.kralidis@canada.ca',
     maintainer='Meteorological Service of Canada',
     maintainer_email='tom.kralidis@canada.ca',
-    url='https://github.com/WMO-ET-WDC/pyshadoz',
+    url='https://github.com/wmo-cop/pyshadoz',
     install_requires=read('requirements.txt').splitlines(),
     packages=find_packages(exclude=['pyshadoz.tests']),
     include_package_data=True,

@@ -1,7 +1,7 @@
 # pyshadoz
 
-[![Build Status](https://travis-ci.org/WMO-ET-WDC/pyshadoz.png)](https://travis-ci.org/WMO-ET-WDC/pyshadoz)
-[![Coverage Status](https://coveralls.io/repos/github/WMO-ET-WDC/pyshadoz/badge.svg?branch=master)](https://coveralls.io/github/WMO-ET-WDC/pyshadoz?branch=master)
+[![Build Status](https://travis-ci.org/wmo-cop/pyshadoz.png)](https://travis-ci.org/wmo-cop/pyshadoz)
+[![Coverage Status](https://coveralls.io/repos/github/wmo-cop/pyshadoz/badge.svg?branch=master)](https://coveralls.io/github/wmo-cop/pyshadoz?branch=master)
 
 ## Overview
 
@@ -35,7 +35,7 @@ cd pyshadoz
 source bin/activate
 
 # clone codebase and install
-git clone https://github.com/WMO-ET-WDC/pyshadoz.git
+git clone https://github.com/wmo-cop/pyshadoz.git
 cd pyshadoz
 python setup.py build
 python setup.py install
@@ -163,7 +163,7 @@ twine upload dist/*
 
 ### Bugs and Issues
 
-All bugs, enhancements and issues are managed on [GitHub](https://github.com/WMO-ET-WDC/pyshadoz/issues).
+All bugs, enhancements and issues are managed on [GitHub](https://github.com/wmo-cop/pyshadoz/issues).
 
 ## Contact
 
