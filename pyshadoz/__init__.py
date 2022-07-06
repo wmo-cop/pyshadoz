@@ -18,7 +18,7 @@
 # those files. Users are asked to read the 3rd Party Licenses
 # referenced with those assets.
 #
-# Copyright (c) 2017 Government of Canada
+# Copyright (c) 2022 Government of Canada
 #
 # Permission is hereby granted, free of charge, to any person
 # obtaining a copy of this software and associated documentation
@@ -51,7 +51,7 @@ import re
 import sys
 
 import click
-from six import StringIO
+from io import StringIO
 
 __version__ = '0.1.3'
 
@@ -111,7 +111,7 @@ def _get_value_type(field, value):
             else:  # int?
                 value2 = int(value)
         except ValueError:  # string (default)?
-                value2 = value
+            value2 = value
 
     return value2
 
@@ -167,12 +167,12 @@ class SHADOZ(object):
 
         LOGGER.debug('Parsing metadata')
         for metadataline in filelines[1:metadatalines-2]:
+            LOGGER.debug(metadataline)
             try:
                 key, value = [v.strip() for v in metadataline.split(': ', 1)]
                 self.metadata[key] = _get_value_type(key, value)
-            except ValueError:
-                LOGGER.warning('No value found for {}'.format(key))
-                self.metadata[key] = None
+            except ValueError as err:
+                LOGGER.warning(f'Metadata error: {err}')
 
         if isinstance(self.metadata['SHADOZ Version'], str):
             self.version = float(self.metadata['SHADOZ Version'].split()[0])
@@ -244,7 +244,7 @@ class SHADOZ(object):
             dl.replace('     ', '')
             lines.append(dl)
 
-        return '\n'.join([re.sub('^     ', '', l) for l in lines])
+        return '\n'.join([re.sub('^     ', '', line) for line in lines])
 
     def get_data_fields(self):
         """
@@ -322,7 +322,7 @@ class SHADOZ(object):
 
     def __repr__(self):
         """repr function"""
-        return '<SHADOZ (filename: {})>'.format(self.filename)
+        return f'<SHADOZ (filename: {self.filename})>'
 
 
 class DataAccessError(Exception):
@@ -401,20 +401,19 @@ def shadoz_info(file_, directory, recursive, verbose=False):
         files = [file_]
 
     for f in files:
-        click.echo('Parsing {}'.format(f))
+        click.echo(f'Parsing {f}')
         with open(f) as ff:
             try:
                 s = SHADOZ(ff, filename=f)
-                click.echo('SHADOZ file: {}\n'.format(s.filename))
+                click.echo(f'SHADOZ file: {s.filename}\n')
                 click.echo('Metadata:')
                 for key, value in s.metadata.items():
-                    click.echo(' {}: {}'.format(key, value))
+                    click.echo(f' {key}: {value}')
                 click.echo('\nData:')
-                click.echo(' Number of records: {}'.format(len(s.data)))
+                click.echo(' Number of records: {len(s.data)}')
                 click.echo(' Attributes:')
                 for df in s.get_data_fields():
                     data_field_data = sorted(s.get_data(df[0], df[1]))
-                    click.echo('  {} ({}): (min={}, max={})'.format(df[0],
-                               df[1], data_field_data[0], data_field_data[-1]))
+                    click.echo(f'  {df[0]} ({df[1]}): (min={data_field_data[0]}, max={data_field_data[-1]})')  # noqa
             except InvalidDataError as err:
                 raise click.ClickException(str(err))

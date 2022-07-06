@@ -1,5 +1,4 @@
-pyshadoz - Terms and Conditions of Use
-======================================
+# pyshadoz - Terms and Conditions of Use
 
 Unless otherwise noted, computer program source code of this distribution
 is covered under Crown Copyright, Government of Canada, and is distributed
@@ -16,10 +15,11 @@ is held by the respective copyright holders as noted in those files. Users
 are asked to read the 3rd Party Licenses referenced with those assets.
 
 
-The MIT License (MIT)
-=====================
+# The MIT License (MIT)
 
-Copyright (c) 2017 Government of Canada
+Copyright (c) 2017-2022 Government of Canada
+
+* * *
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
