@@ -1,6 +1,6 @@
 # pyshadoz
 
-[![Build Status](https://travis-ci.org/wmo-cop/pyshadoz.png)](https://travis-ci.org/wmo-cop/pyshadoz)
+[![Build Status](https://github.com/wmo-cop/pyshadoz/workflows/build%20%E2%9A%99%EF%B8%8F/badge.svg)](https://github.com/wmo-im/pyshadoz/actions)
 [![Coverage Status](https://coveralls.io/repos/github/wmo-cop/pyshadoz/badge.svg?branch=master)](https://coveralls.io/github/wmo-cop/pyshadoz?branch=master)
 
 ## Overview
@@ -19,7 +19,7 @@ pip install pyshadoz
 ```
 
 ### Requirements
-- Python 3.  Works with Python 2.7
+- Python 3
 - [virtualenv](https://virtualenv.pypa.io/)
 
 ### Dependencies

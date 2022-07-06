@@ -18,7 +18,7 @@
 # those files. Users are asked to read the 3rd Party Licenses
 # referenced with those assets.
 #
-# Copyright (c) 2017 Government of Canada
+# Copyright (c) 2022 Government of Canada
 #
 # Permission is hereby granted, free of charge, to any person
 # obtaining a copy of this software and associated documentation
@@ -103,12 +103,7 @@ def get_package_version():
     raise RuntimeError('Unable to find version string.')
 
 
-try:
-    import pypandoc
-    LONG_DESCRIPTION = pypandoc.convert('README.md', 'rst')
-except(IOError, ImportError, OSError):
-    print('Conversion to rST failed.  Using default (will look weird on PyPI)')
-    LONG_DESCRIPTION = read('README.md')
+LONG_DESCRIPTION = read('README.md')
 
 DESCRIPTION = ('pyshadoz is a pure Python package to read and write NASA '
                'Southern Hemisphere ADditional OZonesondes (SHADOZ) data.')
@@ -121,6 +116,7 @@ setup(
     version=get_package_version(),
     description=DESCRIPTION.strip(),
     long_description=LONG_DESCRIPTION,
+    long_description_content_type='text/markdown',
     license='MIT',
     platforms='all',
     keywords=' '.join([
@@ -133,9 +129,9 @@ setup(
         'wmo'
     ]),
     author='Meteorological Service of Canada',
-    author_email='tom.kralidis@canada.ca',
+    author_email='tomkralidis@gmail.com',
     maintainer='Meteorological Service of Canada',
-    maintainer_email='tom.kralidis@canada.ca',
+    maintainer_email='tomkralidis@gmail.com',
     url='https://github.com/wmo-cop/pyshadoz',
     install_requires=read('requirements.txt').splitlines(),
     packages=find_packages(exclude=['pyshadoz.tests']),
