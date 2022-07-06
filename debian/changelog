@@ -1,5 +1,5 @@
-python-pyshadoz (0.1.3) stable; urgency=medium
+python3-pyshadoz (0.1.3) stable; urgency=medium
 
   * Initial package release.
 
- -- Tom Kralidis <tom.kralidis@canada.ca>  Tue, 28 Nov 2017 17:32:11 +0000
+ -- Tom Kralidis <tom.kralidis@ec.gc.ca>  Tue, 28 Nov 2017 17:32:11 +0000
