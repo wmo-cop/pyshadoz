@@ -1,7 +1,6 @@
 # pyshadoz
 
 [![Build Status](https://github.com/wmo-cop/pyshadoz/workflows/build%20%E2%9A%99%EF%B8%8F/badge.svg)](https://github.com/wmo-im/pyshadoz/actions)
-[![Coverage Status](https://coveralls.io/repos/github/wmo-cop/pyshadoz/badge.svg?branch=master)](https://coveralls.io/github/wmo-cop/pyshadoz?branch=master)
 
 ## Overview
 
@@ -15,7 +14,7 @@ The easiest way to install pyshadoz is via the Python [pip](https://pip.pypa.io/
 utility:
 
 ```bash
-pip install pyshadoz
+pip3 install pyshadoz
 ```
 
 ### Requirements
@@ -37,8 +36,8 @@ source bin/activate
 # clone codebase and install
 git clone https://github.com/wmo-cop/pyshadoz.git
 cd pyshadoz
-python setup.py build
-python setup.py install
+python3 setup.py build
+python3 setup.py install
 ```
 
 ## Running
@@ -137,23 +136,19 @@ with open('new_shadoz_file.dat', 'w') as ff:
 
 ```bash
 # install dev requirements
-pip install -r requirements-dev.txt
+pip3 install -r requirements-dev.txt
 
 # run tests like this:
-python pyshadoz/tests/run_tests.py
+python3 pyshadoz/tests/run_tests.py
 
 # or this:
-python setup.py test
-
-# measure code coverage
-coverage run --source=pyshadoz -m unittest pyshadoz.tests.run_tests
-coverage report -m
+python3 setup.py test
 ```
 
 ## Releasing
 
 ```bash
-python setup.py sdist bdist_wheel --universal
+python3 setup.py sdist bdist_wheel --universal
 twine upload dist/*
 ```
 

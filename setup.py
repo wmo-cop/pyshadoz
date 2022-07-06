@@ -62,26 +62,7 @@ class PyTest(Command):
     def run(self):
         import subprocess
         errno = subprocess.call([sys.executable,
-                                 'pyshadoz/tests/run_tests.py'])
-        raise SystemExit(errno)
-
-
-class PyCoverage(Command):
-    user_options = []
-
-    def initialize_options(self):
-        pass
-
-    def finalize_options(self):
-        pass
-
-    def run(self):
-        import subprocess
-
-        errno = subprocess.call(['coverage', 'run', '--source=pyshadoz',
-                                 '-m', 'unittest',
-                                 'pyshadoz.tests.run_tests'])
-        errno = subprocess.call(['coverage', 'report', '-m'])
+                                 'tests/run_tests.py'])
         raise SystemExit(errno)
 
 
@@ -150,5 +131,5 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python'
     ],
-    cmdclass={'test': PyTest, 'coverage': PyCoverage}
+    cmdclass={'test': PyTest}
 )
