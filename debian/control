@@ -1,15 +1,19 @@
-Source: python-pyshadoz
+Source: python3-pyshadoz
 Section: python
 Priority: optional
-Maintainer: Tom Kralidis <tom.kralidis@canada.ca>
-Build-Depends: debhelper (>= 9), dh-python, python, python-setuptools
-Standards-Version: 3.9.5
-X-Python-Version: >= 3.4
+Maintainer: Tom Kralidis <tomkralidis@gmail.com>
+Build-Depends: debhelper (>= 9),
+               dh-python,
+               python3-all,
+               python3-setuptools
+Standards-Version: 4.3.0
 Vcs-Git: https://github.com/wmo-cop/pyshadoz.git
-
-Package: python-pyshadoz
-Architecture: all
-Depends: python, python-click, python-six
 Homepage: https://github.com/wmo-cop/pyshadoz
+
+Package: python3-pyshadoz
+Architecture: all
+Depends: ${python3:Depends},
+         python3-click,
+         ${misc:Depends}
 Description: pyshadoz is a pure Python package to read and write NASA
  Southern Hemisphere ADditional OZonesondes (SHADOZ) data.

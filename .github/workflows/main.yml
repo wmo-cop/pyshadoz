@@ -28,6 +28,11 @@ jobs:
       run: python3 setup.py test
     - name: run flake8 ⚙️
       run: flake8
+    - name: run code coverage
+      run: |
+        coverage run --source=pyshadoz -m unittest pyshadoz.tests.run_tests
+        coverage report -m
+        coveralls
     - name: build Python package 🏗️
       run: python3 setup.py sdist bdist_wheel --universal
     - name: build Debian package 🏗️

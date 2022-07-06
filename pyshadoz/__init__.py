@@ -51,7 +51,7 @@ import re
 import sys
 
 import click
-from six import StringIO
+from io import StringIO
 
 __version__ = '0.1.3'
 
