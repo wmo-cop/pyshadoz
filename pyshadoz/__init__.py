@@ -57,6 +57,8 @@ __version__ = '0.1.3'
 
 LOGGER = logging.getLogger(__name__)
 
+SUPPORTED_VERSIONS = [5, 6]
+
 
 def _get_value_type(field, value):
     """
@@ -116,7 +118,7 @@ def _get_value_type(field, value):
     return value2
 
 
-class SHADOZ(object):
+class SHADOZ:
     """NASA SHADOZ object model"""
 
     def __init__(self, ioobj=None, version=5, filename=None):
@@ -179,11 +181,16 @@ class SHADOZ(object):
         else:
             self.version = float(self.metadata['SHADOZ Version'])
         LOGGER.debug('Checking major version')
-        if int(self.version) != int(version):
+        if int(self.version) not in SUPPORTED_VERSIONS:
             raise InvalidDataError('Invalid SHADOZ version')
 
         LOGGER.debug('Parsing data fields')
-        tmp = re.split(r'\s{2,}', filelines[metadatalines-2].strip())
+
+        if int(self.version) == 6:
+            tmp = filelines[metadatalines-2].split()
+        else:
+            tmp = re.split(r'\s{2,}', filelines[metadatalines-2].strip())
+
         self.data_fields = [v.strip() for v in tmp]
 
         LOGGER.debug('Parsing data fields units')
@@ -191,8 +198,9 @@ class SHADOZ(object):
         self.data_fields_units = [v.strip() for v in tmp]
 
         if len(self.data_fields) != len(self.data_fields_units):
-            raise InvalidDataError(
-                'Number of fields not equal to number of field units')
+            msg = f'Number of fields {len(self.data_fields)} not equal to number of field units {len(self.data_fields_units)}'  # noqa
+            LOGGER.error(msg)
+            raise InvalidDataError(msg)
 
         LOGGER.debug('Parsing data')
         for dl in filelines[metadatalines:]:

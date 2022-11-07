@@ -250,6 +250,19 @@ class SHADOZTest(unittest.TestCase):
                          date(2016, 2, 23))
         self.assertEqual(s2.metadata['Launch Time (UT)'], time(23, 18, 37))
 
+    def test_v6(self):
+        """test with shadoz v6 data"""
+
+        filename = 'ascen_20220105T12_SHADOZV06.dat'
+
+        with open(get_abspath(filename)) as ff:
+            s = SHADOZ(ff, filename=filename)
+
+            # test core properties
+            self.assertEqual(s.filename, filename)
+            self.assertEqual(s.version, 6)
+            self.assertEqual(len(s.data_fields), len(s.data_fields_units))
+
 
 def get_abspath(filepath):
     """helper function absolute file access"""

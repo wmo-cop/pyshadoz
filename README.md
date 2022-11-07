@@ -7,6 +7,7 @@
 pyshadoz is a pure Python package to read and write [NASA Southern Hemisphere
 ADditional OZonesondes](https://tropo.gsfc.nasa.gov/shadoz/) (SHADOZ) data.
 
+Versions 5 and 6 are supported.
 
 ## Installation
 
