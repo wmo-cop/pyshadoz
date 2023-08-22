@@ -18,7 +18,7 @@
 # those files. Users are asked to read the 3rd Party Licenses
 # referenced with those assets.
 #
-# Copyright (c) 2022 Government of Canada
+# Copyright (c) 2023 Government of Canada
 #
 # Permission is hereby granted, free of charge, to any person
 # obtaining a copy of this software and associated documentation
@@ -418,7 +418,7 @@ def shadoz_info(file_, directory, recursive, verbose=False):
                 for key, value in s.metadata.items():
                     click.echo(f' {key}: {value}')
                 click.echo('\nData:')
-                click.echo(' Number of records: {len(s.data)}')
+                click.echo(f' Number of records: {len(s.data)}')
                 click.echo(' Attributes:')
                 for df in s.get_data_fields():
                     data_field_data = sorted(s.get_data(df[0], df[1]))
