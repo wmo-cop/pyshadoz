@@ -3,7 +3,7 @@
 # Terms and Conditions of Use
 #
 # Unless otherwise noted, computer program source code of this
-# distribution # is covered under Crown Copyright, Government of
+# distribution is covered under Crown Copyright, Government of
 # Canada, and is distributed under the MIT License.
 #
 # The Canada wordmark and related graphics associated with this
@@ -18,7 +18,7 @@
 # those files. Users are asked to read the 3rd Party Licenses
 # referenced with those assets.
 #
-# Copyright (c) 2023 Government of Canada
+# Copyright (c) 2024 Government of Canada
 #
 # Permission is hereby granted, free of charge, to any person
 # obtaining a copy of this software and associated documentation
@@ -53,7 +53,7 @@ import sys
 import click
 from io import StringIO
 
-__version__ = '0.1.3'
+__version__ = '0.2.0'
 
 LOGGER = logging.getLogger(__name__)
 
@@ -80,7 +80,10 @@ def _get_value_type(field, value):
         try:
             value2 = datetime.strptime(value, '%d, %B, %Y').date()
         except ValueError:
-            value2 = datetime.strptime(value, '%d %B, %Y').date()
+            try:
+                value2 = datetime.strptime(value, '%d %B, %Y').date()
+            except ValueError:
+                value2 = datetime.strptime(value, '%a %b %d %H:%M:%S %Y').date()  # noqa
     elif field2 == 'launch date':
         value2 = datetime.strptime(value, '%Y%m%d').date()
     elif field2 == 'launch time (ut)':
@@ -229,7 +232,7 @@ class SHADOZ:
 
         for key, value in self.metadata.items():
             if key == 'SHADOZ format data created':
-                value2 = value.strftime('%d %B, %Y')
+                value2 = value.strftime('%a %b %d %H:%M:%S %Y')
             elif isinstance(value, time):
                 value2 = value.strftime('%H:%M:%S')
             elif isinstance(value, datetime) or isinstance(value, date):
