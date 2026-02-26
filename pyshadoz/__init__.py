@@ -18,7 +18,7 @@
 # those files. Users are asked to read the 3rd Party Licenses
 # referenced with those assets.
 #
-# Copyright (c) 2024 Government of Canada
+# Copyright (c) 2026 Government of Canada
 #
 # Permission is hereby granted, free of charge, to any person
 # obtaining a copy of this software and associated documentation
@@ -45,15 +45,17 @@
 
 from collections import OrderedDict
 from datetime import date, datetime, time
+from io import StringIO
 import logging
 import os
 import re
 import sys
 
 import click
-from io import StringIO
 
-__version__ = '0.2.0'
+from pyshadoz.util import get_package_version
+
+__version__ = get_package_version()
 
 LOGGER = logging.getLogger(__name__)
 

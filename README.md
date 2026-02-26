@@ -23,7 +23,7 @@ pip3 install pyshadoz
 - [virtualenv](https://virtualenv.pypa.io/)
 
 ### Dependencies
-Dependencies are listed in [requirements.txt](requirements.txt). Dependencies
+Dependencies are listed in [pyproject.toml](pyproject.toml). Dependencies
 are automatically installed during pyshadoz installation.
 
 ### Installing pyshadoz
@@ -37,8 +37,7 @@ source bin/activate
 # clone codebase and install
 git clone https://github.com/wmo-cop/pyshadoz.git
 cd pyshadoz
-python3 setup.py build
-python3 setup.py install
+pip3 install .
 ```
 
 ## Running
@@ -136,21 +135,31 @@ with open('new_shadoz_file.dat', 'w') as ff:
 ### Running Tests
 
 ```bash
-# install dev requirements
-pip3 install -r requirements-dev.txt
-
-# run tests like this:
 python3 pyshadoz/tests/run_tests.py
 
-# or this:
-python3 setup.py test
 ```
 
 ## Releasing
 
 ```bash
-python3 setup.py sdist bdist_wheel --universal
+# create release (x.y.z is the release version)
+vi pyproject.toml  # update [project]/version
+git commit -am 'update release version x.y.z'
+git push origin main
+git tag -a x.y.z -m 'tagging release version x.y.z'
+git push --tags
+
+# upload to PyPI
+rm -fr build dist *.egg-info
+python3 -m build
 twine upload dist/*
+
+# publish release on GitHub (https://github.com/wmo-cop/pyshadoz/releases/new)
+
+# bump version back to dev
+vi pyproject.toml  # update [project]/version
+git commit -am 'back to dev'
+git push origin main
 ```
 
 ### Code Conventions
