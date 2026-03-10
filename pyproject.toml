@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyshadoz"
-version = "0.3.dev0"
+version = "0.2.0"
 description = "pyshadoz is a pure Python package to read and write NASA Southern Hemisphere ADditional OZonesondes (SHADOZ) data"
 readme = "README.md"
 requires-python = ">=3.12"
